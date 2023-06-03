@@ -9,7 +9,7 @@
 use embedded_hal::{
     delay::*,
     digital::{InputPin, OutputPin},
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::color::OctColor;
@@ -49,7 +49,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         // Reset the device
@@ -68,7 +67,7 @@ where
         self.cmd_with_data(spi, Command::FlashMode, &[0xAA])?;
 
         // we can only ignore this kind of error
-        delay.delay_ms(100).ok();
+        delay.delay_ms(100);
 
         self.update_vcom(spi)?;
         Ok(())
@@ -83,7 +82,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = OctColor;
     fn new(
@@ -206,7 +204,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn command(&mut self, spi: &mut SPI, command: Command) -> Result<(), SPI::Error> {
         self.interface.cmd(spi, command)

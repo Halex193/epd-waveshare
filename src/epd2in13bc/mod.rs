@@ -52,7 +52,7 @@
 use embedded_hal::{
     delay::*,
     digital::*,
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::interface::DisplayInterface;
@@ -101,7 +101,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         // Values taken from datasheet and sample code
@@ -115,7 +114,7 @@ where
         // power on
         self.command(spi, Command::PowerOn)?;
         // we can only ignore this kind of error
-        delay.delay_ms(5).ok();
+        delay.delay_ms(5);
         self.wait_until_idle();
 
         // set the panel settings
@@ -146,7 +145,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn update_color_frame(
         &mut self,
@@ -191,7 +189,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = TriColor;
     fn new(
@@ -337,7 +334,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn command(&mut self, spi: &mut SPI, command: Command) -> Result<(), SPI::Error> {
         self.interface.cmd(spi, command)

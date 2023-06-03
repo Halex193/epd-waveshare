@@ -11,7 +11,7 @@
 use embedded_hal::{
     delay::*,
     digital::{InputPin, OutputPin},
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::buffer_len;
@@ -65,7 +65,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         // HW reset
@@ -159,7 +158,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = Color;
     fn new(
@@ -368,7 +366,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     /// When using partial refresh, the controller uses the provided buffer for
     /// comparison with new buffer.

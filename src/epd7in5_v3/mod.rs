@@ -10,7 +10,7 @@
 use embedded_hal::{
     delay::*,
     digital::{InputPin, OutputPin},
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::color::TriColor;
@@ -57,7 +57,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         // Reset the device
@@ -92,7 +91,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn update_color_frame(
         &mut self,
@@ -137,7 +135,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = TriColor;
     fn new(
@@ -270,7 +267,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn command(&mut self, spi: &mut SPI, command: Command) -> Result<(), SPI::Error> {
         self.interface.cmd(spi, command)
@@ -293,7 +289,7 @@ where
         while self.interface.is_busy(IS_BUSY_LOW) {
             self.interface.cmd(spi, Command::GetStatus)?;
             // we can only ignore this kind of error
-            delay.delay_ms(20).ok();
+            delay.delay_ms(20);
         }
         Ok(())
     }

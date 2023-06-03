@@ -3,7 +3,7 @@ use core::marker::PhantomData;
 use embedded_hal::{
     delay::*,
     digital::*,
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 /// The Connection Interface of all (?) Waveshare EPD-Devices
@@ -28,7 +28,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     pub fn new(busy: BUSY, dc: DC, rst: RST) -> Self {
         DisplayInterface {
@@ -164,14 +163,14 @@ where
     pub(crate) fn reset(&mut self, delay: &mut DELAY, initial_delay: u32, duration: u32) {
         let _ = self.rst.set_high();
         // we can only ignore this kind of error
-        delay.delay_ms(initial_delay).ok();
+        delay.delay_ms(initial_delay);
 
         let _ = self.rst.set_low();
         // we can only ignore this kind of error
-        delay.delay_ms(duration).ok();
+        delay.delay_ms(duration);
         let _ = self.rst.set_high();
         //TODO: the upstream libraries always sleep for 200ms here
         // 10ms works fine with just for the 7in5_v2 but this needs to be validated for other devices
-        delay.delay_ms(200).ok();
+        delay.delay_ms(200);
     }
 }

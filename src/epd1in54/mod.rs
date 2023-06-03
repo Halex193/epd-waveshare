@@ -56,7 +56,7 @@ const IS_BUSY_LOW: bool = false;
 use embedded_hal::{
     delay::*,
     digital::*,
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::type_a::{
@@ -92,7 +92,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         self.interface.reset(delay, 10, 10);
@@ -148,7 +147,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = Color;
     fn width(&self) -> u32 {
@@ -296,7 +294,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn wait_until_idle(&mut self) {
         self.interface.wait_until_idle(IS_BUSY_LOW);

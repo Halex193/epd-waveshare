@@ -77,7 +77,7 @@ const LUT_PARTIAL_2IN9: [u8; 159] = [
 use embedded_hal::{
     delay::*,
     digital::*,
-    spi::{SpiBusWrite, SpiDevice},
+    spi::SpiDevice,
 };
 
 use crate::type_a::command::Command;
@@ -112,7 +112,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn init(&mut self, spi: &mut SPI, delay: &mut DELAY) -> Result<(), SPI::Error> {
         self.interface.reset(delay, 10, 2);
@@ -154,7 +153,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     type DisplayColor = Color;
     fn width(&self) -> u32 {
@@ -293,7 +291,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     fn wait_until_idle(&mut self) {
         self.interface.wait_until_idle(IS_BUSY_LOW);
@@ -373,7 +370,6 @@ where
     DC: OutputPin,
     RST: OutputPin,
     DELAY: DelayUs,
-    SPI::Bus: SpiBusWrite<u8>,
 {
     /// To be followed immediately by `update_new_frame`.
     fn update_old_frame(
